@@ -50,7 +50,8 @@
     "api-extractor": "api-extractor run",
     "generate-dts": "rollup -c rollup.config.dts.js",
     "dev": "rollup -c --watch",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "dev:open": "rollup -c --watch & open http://localhost:3000"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.38.0",
