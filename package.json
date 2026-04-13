@@ -49,7 +49,8 @@
     "typecheck": "tsc --noEmit",
     "api-extractor": "api-extractor run",
     "generate-dts": "rollup -c rollup.config.dts.js",
-    "dev": "rollup -c --watch"
+    "dev": "rollup -c --watch",
+    "clean": "rm -rf dist"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.38.0",
