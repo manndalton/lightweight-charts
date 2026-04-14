@@ -51,7 +51,8 @@
     "generate-dts": "rollup -c rollup.config.dts.js",
     "dev": "rollup -c --watch",
     "clean": "rm -rf dist",
-    "dev:open": "rollup -c --watch & open http://localhost:3000"
+    "dev:open": "rollup -c --watch & open http://localhost:3000",
+    "build:analyze": "NODE_ENV=production ANALYZE=true rollup -c"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.38.0",
