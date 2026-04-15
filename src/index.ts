@@ -1,46 +1,112 @@
-/// <reference types="_build-time-constants" />
-
-import { customStyleDefaults, seriesOptionsDefaults } from './api/options/series-options-defaults';
-import { CustomSeriesOptions } from './model/series-options';
-
-export { LineStyle, LineType } from './renderers/draw-line';
-
-export { TrackingModeExitMode } from './model/chart-model';
-export { CrosshairMode } from './model/crosshair';
-export { MismatchDirection } from './model/plot-list';
-export { PriceScaleMode } from './model/price-scale';
-export { PriceLineSource, LastPriceAnimationMode } from './model/series-options';
-export { ColorType } from './model/layout-options';
-
-export { isBusinessDay, isUTCTimestamp } from './model/horz-scale-behavior-time/types';
-export { TickMarkType } from './model/horz-scale-behavior-time/types';
-export const customSeriesDefaultOptions: CustomSeriesOptions = {
-	...seriesOptionsDefaults,
-	...customStyleDefaults,
-};
-export type { ICustomSeriesPaneView, ICustomSeriesPaneRenderer, CustomBarItemData, CustomData } from './model/icustom-series';
-
-export { createChart, createChartEx, defaultHorzScaleBehavior } from './api/create-chart';
-export { createYieldCurveChart } from './api/create-yield-curve-chart';
-export { createOptionsChart } from './api/create-options-chart';
-
-export { lineSeries as LineSeries } from './model/series/line-series';
-export { baselineSeries as BaselineSeries } from './model/series/baseline-series';
-export { areaSeries as AreaSeries } from './model/series/area-series';
-export { barSeries as BarSeries } from './model/series/bar-series';
-export { candlestickSeries as CandlestickSeries } from './model/series/candlestick-series';
-export { histogramSeries as HistogramSeries } from './model/series/histogram-series';
-/*
-	Plugins
-*/
-export { createTextWatermark } from './plugins/text-watermark/primitive';
-export { createImageWatermark } from './plugins/image-watermark/primitive';
-export { createSeriesMarkers } from './plugins/series-markers/wrapper';
-export { createUpDownMarkers } from './plugins/up-down-markers-plugin/wrapper';
-
 /**
- * Returns the current version as a string. For example `'3.3.0'`.
+ * @module lightweight-charts
+ * Main entry point for the lightweight-charts library.
+ * Exports all public API surface.
  */
-export function version(): string {
-	return process.env.BUILD_VERSION;
-}
+
+export { createChart } from './api/create-chart';
+export { createChartEx } from './api/create-chart-ex';
+
+export { isBusinessDay, isUTCTimestamp } from './api/data-layer';
+
+export type {
+	IChartApi,
+	MouseEventHandler,
+	MouseEventParams,
+	PaneSize,
+} from './api/ichart-api';
+
+export type {
+	ISeriesApi,
+	SeriesDataItemTypeMap,
+	SeriesMarker,
+	SeriesMarkerPosition,
+	SeriesMarkerShape,
+	SeriesOptionsMap,
+	SeriesPartialOptionsMap,
+	SeriesType,
+} from './api/iseries-api';
+
+export type {
+	IPriceLine,
+	IPriceLineApi,
+} from './api/iprice-line';
+
+export type {
+	ITimeScaleApi,
+	LogicalRange,
+	LogicalRangeChangeEventHandler,
+	SizeChangeEventHandler,
+	TimeRangeChangeEventHandler,
+} from './api/itime-scale-api';
+
+export type { IPriceScaleApi } from './api/iprice-scale-api';
+
+export type {
+	BarData,
+	BarPrice,
+	BarSeriesOptions,
+	BarStyleOptions,
+} from './model/series-options';
+
+export type {
+	BusinessDay,
+	Time,
+	UTCTimestamp,
+} from './model/horz-scale-behavior-time/types';
+
+export type {
+	ChartOptions,
+	DeepPartial,
+	HorzScaleBehavior,
+	LayoutOptions,
+	PriceScaleOptions,
+	TimeScaleOptions,
+} from './model/chart-model';
+
+export type {
+	LineData,
+	LineSeriesOptions,
+	LineStyleOptions,
+	LineType,
+	LineWidth,
+} from './model/series-options';
+
+export type {
+	AreaData,
+	AreaSeriesOptions,
+	AreaStyleOptions,
+} from './model/series-options';
+
+export type {
+	CandlestickData,
+	CandlestickSeriesOptions,
+	CandlestickStyleOptions,
+} from './model/series-options';
+
+export type {
+	HistogramData,
+	HistogramSeriesOptions,
+	HistogramStyleOptions,
+} from './model/series-options';
+
+export type {
+	BaselineData,
+	BaselineSeriesOptions,
+	BaselineStyleOptions,
+} from './model/series-options';
+
+export type {
+	PriceLineOptions,
+} from './model/price-line-options';
+
+export type {
+	CrosshairMode,
+	CrosshairOptions,
+} from './model/crosshair';
+
+export { CrosshairMode } from './model/crosshair';
+export { LineType } from './renderers/draw-line';
+export { PriceScaleMode } from './model/price-scale';
+export { TrackingModeExitMode } from './model/chart-model';
+export { MismatchDirection } from './model/plot-list';
