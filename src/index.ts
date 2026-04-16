@@ -105,6 +105,7 @@ export type {
 	CrosshairOptions,
 } from './model/crosshair';
 
+// Re-exporting enums as values so consumers don't need to import from deep paths
 export { CrosshairMode } from './model/crosshair';
 export { LineType } from './renderers/draw-line';
 export { PriceScaleMode } from './model/price-scale';
