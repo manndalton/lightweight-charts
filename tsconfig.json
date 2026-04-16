@@ -16,7 +16,8 @@
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "exactOptionalPropertyTypes": true
   },
   "include": [
     "src/**/*.ts"
