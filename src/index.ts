@@ -111,3 +111,6 @@ export { LineType } from './renderers/draw-line';
 export { PriceScaleMode } from './model/price-scale';
 export { TrackingModeExitMode } from './model/chart-model';
 export { MismatchDirection } from './model/plot-list';
+
+// NOTE: MismatchDirection is useful when building custom data series that need
+// to search the plot list — Direction.None means no search, Left/Right for nearest.
