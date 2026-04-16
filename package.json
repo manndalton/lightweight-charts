@@ -53,7 +53,8 @@
     "clean": "rm -rf dist",
     "dev:open": "rollup -c --watch & open http://localhost:3000",
     "build:analyze": "NODE_ENV=production ANALYZE=true rollup -c",
-    "build:all": "npm run clean && npm run build:prod"
+    "build:all": "npm run clean && npm run build:prod",
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.38.0",
