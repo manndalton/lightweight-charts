@@ -54,7 +54,8 @@
     "dev:open": "rollup -c --watch & open http://localhost:3000",
     "build:analyze": "NODE_ENV=production ANALYZE=true rollup -c",
     "build:all": "npm run clean && npm run build:prod",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:coverage:open": "jest --coverage && open coverage/lcov-report/index.html"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.38.0",
