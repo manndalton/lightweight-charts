@@ -1,103 +1,79 @@
-import { lowerBound, upperBound } from '../helpers/algorithms';
-import { Nominal } from '../helpers/nominal';
-
-import { Coordinate } from './coordinate';
-import { InternalHorzScaleItem } from './ihorz-scale-behavior';
-import { RangeImpl } from './range-impl';
+/**
+ * Represents a UTC timestamp in seconds.
+ */
+export type UTCTimestamp = number & { readonly _brand: 'UTCTimestamp' };
 
 /**
- * Weight of the tick mark. @see TickMarkWeight enum
+ * Represents a business day (year, month, day).
  */
-export type TickMarkWeightValue = Nominal<number, 'TickMarkWeightValue'>;
-
-/**
- * Represents a point on the time scale
- */
-export interface TimeScalePoint {
-	/** Weight of the point */
-	readonly timeWeight: TickMarkWeightValue;
-	/** Time of the point */
-	readonly time: InternalHorzScaleItem;
-	/** Original time for the point */
-	readonly originalTime: unknown;
+export interface BusinessDay {
+	/** The year, e.g. 2023. */
+	year: number;
+	/** The month, 1–12. */
+	month: number;
+	/** The day of the month, 1–31. */
+	day: number;
 }
 
 /**
- * Represents a generic range `from` one value `to` another.
+ * A time value that can be either a UTC timestamp or a business day.
  */
-export interface IRange<T> {
-	/**
-	 * The from value. The start of the range.
-	 */
-	from: T;
-	/**
-	 * The to value. The end of the range.
-	 */
-	to: T;
-}
-
-export type TimePointsRange = IRange<Omit<TimeScalePoint, 'timeWeight'>>;
+export type Time = UTCTimestamp | BusinessDay | string;
 
 /**
- * Index for a point on the horizontal (time) scale.
+ * Checks whether the given value is a {@link BusinessDay} object.
  */
-export type TimePointIndex = Nominal<number, 'TimePointIndex'>;
+export function isBusinessDay(value: Time): value is BusinessDay {
+	return (
+		typeof value === 'object' &&
+		value !== null &&
+		typeof (value as BusinessDay).year === 'number' &&
+		typeof (value as BusinessDay).month === 'number' &&
+		typeof (value as BusinessDay).day === 'number'
+	);
+}
 
 /**
- * Represents the `to` or `from` number in a logical range.
+ * Checks whether the given value is a {@link UTCTimestamp}.
  */
-export type Logical = Nominal<number, 'Logical'>;
+export function isUTCTimestamp(value: Time): value is UTCTimestamp {
+	return typeof value === 'number';
+}
 
 /**
- * A logical range is an object with 2 properties: `from` and `to`, which are numbers and represent logical indexes on the time scale.
- *
- * The starting point of the time scale's logical range is the first data item among all series.
- * Before that point all indexes are negative, starting from that point - positive.
- *
- * Indexes might have fractional parts, for instance 4.2, due to the time-scale being continuous rather than discrete.
- *
- * Integer part of the logical index means index of the fully visible bar.
- * Thus, if we have 5.2 as the last visible logical index (`to` field), that means that the last visible bar has index 5, but we also have partially visible (for 20%) 6th bar.
- * Half (e.g. 1.5, 3.5, 10.5) means exactly a middle of the bar.
+ * Converts a {@link BusinessDay} to a string in the format `YYYY-MM-DD`.
  */
-export type LogicalRange = IRange<Logical>;
-
-export interface TimedValue {
-	time: TimePointIndex;
-	x: Coordinate;
+export function businessDayToString(businessDay: BusinessDay): string {
+	const month = String(businessDay.month).padStart(2, '0');
+	const day = String(businessDay.day).padStart(2, '0');
+	return `${businessDay.year}-${month}-${day}`;
 }
 
-export type SeriesItemsIndexesRange = IRange<number>;
-
-function lowerBoundItemsCompare(item: TimedValue, time: TimePointIndex): boolean {
-	return item.time < time;
+/**
+ * Parses a string in the format `YYYY-MM-DD` into a {@link BusinessDay}.
+ * Throws if the string is not a valid date.
+ */
+export function stringToBusinessDay(value: string): BusinessDay {
+	const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+	if (match === null) {
+		throw new Error(`Invalid date string: ${value}, expected format YYYY-MM-DD`);
+	}
+	return {
+		year: parseInt(match[1], 10),
+		month: parseInt(match[2], 10),
+		day: parseInt(match[3], 10),
+	};
 }
 
-function upperBoundItemsCompare(item: TimedValue, time: TimePointIndex): boolean {
-	return time < item.time;
-}
-
-export function visibleTimedValues(items: TimedValue[], range: RangeImpl<TimePointIndex>, extendedRange: boolean): SeriesItemsIndexesRange {
-	const firstBar = range.left();
-	const lastBar = range.right();
-
-	const from = lowerBound(items, firstBar, lowerBoundItemsCompare);
-	const to = upperBound(items, lastBar, upperBoundItemsCompare);
-
-	if (!extendedRange) {
-		return { from, to };
+/**
+ * Converts any {@link Time} value to a UTC timestamp (seconds since epoch).
+ * Business day strings and objects are treated as midnight UTC on that date.
+ */
+export function timeToIndex(time: Time): number {
+	if (isUTCTimestamp(time)) {
+		return time;
 	}
 
-	let extendedFrom = from;
-	let extendedTo = to;
-
-	if (from > 0 && from < items.length && items[from].time >= firstBar) {
-		extendedFrom = from - 1;
-	}
-
-	if (to > 0 && to < items.length && items[to - 1].time <= lastBar) {
-		extendedTo = to + 1;
-	}
-
-	return { from: extendedFrom, to: extendedTo };
+	const bd: BusinessDay = isBusinessDay(time) ? time : stringToBusinessDay(time as string);
+	return Date.UTC(bd.year, bd.month - 1, bd.day) / 1000;
 }
