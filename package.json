@@ -56,7 +56,8 @@
     "build:all": "npm run clean && npm run build:prod",
     "test:watch": "jest --watch",
     "test:coverage:open": "jest --coverage && open coverage/lcov-report/index.html",
-    "test:coverage:report": "jest --coverage --coverageReporters=text-summary"
+    "test:coverage:report": "jest --coverage --coverageReporters=text-summary",
+    "test:verbose": "jest --verbose"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.38.0",
